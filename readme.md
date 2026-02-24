@@ -107,10 +107,65 @@ Create| Construir novo| Banco de dados, tabela, schema|
 |Alter| Modificar existente| Colunas, tipos de dados|
 DROP| Excluir| Banco de dados, tabela, schema|
 
-## 3 
+## 3 DML - Linguagem de Manipulação de Dados
+- DDL (Linguagem de Definição de Dados)
+- Nós usamos **DML (Data Manipulation Language)** para alterar os dados reais armazenados dentro de nossas tabelas. Enquanto a DDL define o "recipiente", a DML nos permite gerenciar o conteúdo interno.
+## 3.1 Operações Principais de DML
+- Nós contamos com três comandos primários para manipular nossos dados:
+    - **INSERT**: Nós usamos para adicionar novas linhas de dados em uma tabela
+    - **UPDATE**: Nós usamos para modificar informações existentes dentro de uma tabela
+    - **DELETE**: Nós usamos para remover registros específicos de uma tabela
+## 3.2 Adicionando Dados (INSERT)
+- Quando queremos popular nossas tabelas, temos dois métodos principais para inserir dados:
+    - Método 1: Entrada Manual (VALUES)
+        - Nós especificamos manualmente os valores que queremos adicionar a colunas específicas
+        - **INSERT INTO Products (ProductID, ProductName, Price)**
+        - **VALUES (1, 'Laptop', 1200.00);**
+    - Método 2: INSERT usando SELECT
+        - Nós também podemos inserir dados em uma tabela de destino consultando-os de uma tabela de origem
+        - **INSERT INTO TargetTable**
+        - **SELECT * FROM SourceTable**
+        - **WHERE condition;**
+## 3.3 Modificando Dados (UPDATE)
+- Quando precisamos editar registros existentes, usamos a instrução **UPDATE**. Devemos ser muito cuidadosos ao incluir uma cláusula **WHERE**; caso contrário, atualizaremos todas as linhas da tabela
+- **UPDATE table_name
+SET column1 = value1, column2 = value2
+WHERE < condition >;**
+- **Regra**: Sempre use **WHERE** para evitar atualizações em massa não intencionais.
+## 3.4 Removendo Dados (DELETE)
+- Quando os dados não são mais necessários, usamos o comando **DELETE**. De forma semelhante ao update, usamos uma cláusula **WHERE** para filtrar linhas específicas.
+- **DELETE FROM table_name
+WHERE < condition >;**
+## 3.5 Anatomia de uma Declaração SQL
+- Uma instrução SQL é composta de elementos específicos que dizem ao banco como processar o pedido:
+- Comentários (--) – Documentam o código
+- Palavras-chave – Reservadas e com significado especial
+- Cláusulas – Blocos que constroem a instrução
+- Funções – Ferramentas internas que transformam dados.
+- Identificadores – Nomes de objetos de banco como tabelas ou colunas
+- Operadores – Usados para comparações
+- Literais – Valores constantes ou strings
 
-    
-
+### Estrutura básica de consulta
+- SELECT
+ column_name  
+FROM  
+table_name;
+## 3.6 Filtragem e Ordenação
+- `WHERE` – Filtra registros com condições específicas
+- `ORDER BY` – Ordena resultados em ordem ascendente ou descendente
+## Ferramentas Avançadas de Seleção
+- `DISTINCT` – Remove duplicatas.
+- `TOP` / `LIMIT` – Especifica número de registros retornados
+## 3.7 Aliases (AS)
+- Usados para dar nome temporário a tabelas ou colunas para tornar os resultados mais legíveis.
+## 3.8 Ordem Lógica de Avaliação
+- SQL não processa cláusulas na ordem escrita
+- A execução padrão lógica é:  
+1. `FROM`
+2. `WHERE`
+3.  `SELECT`  
+4.   `ORDER BY`
     
     
     
