@@ -166,6 +166,194 @@ table_name;
 2. `WHERE`
 3.  `SELECT`  
 4.   `ORDER BY`
+## 4 Chave estrangeira 
+- O que é **Chave Estrangeira? (Foreign Key)?**
+- A **Chave estrangeira** é um campo de uma tabela que **aponta para a chave primária de outra tabela**
+- :point_right: Ela serve para **criar relacionamentos entre tabelas**
+- Em outras palavras:
+    - A chave estrangeira é o que "*liga*" uma tabela à outra em um banco de dados relacional.
+## 4.2 Por que precisamos dela?
+- Sem chave estrangeira:
+    - As tabelas ficam **isoladas**
+    - Não há garantia de que os dados combinam
+    - Podem existir registros "*órfãos*" (sem relção real)
+- Com chave estrangeira:
+    - O banco **garante integridade dos dados**
+    - Evita erros e inconsistências
+    - Representa relações do mundo real (cliente &rarr; pedido, aluno &rarr; mátricula, etc.)
+## 4.3 Exemplo prático - Tabela de Clientes
+| Id (PK) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; | Nome |
+|----------|-------|
+1 | Ana Silva |
+2 | João Souza |
+## 4.4 Exemplo prático - Tabela de Pedidos
+|Id (PK) | ClienteId (FK) | Total|
+|--------|----------------|-------|
+|1001 | 1| 3500|
+|1002 | 2| 200|
+|1003| 1 | 1200|
+## 5 Normalização
+- Normalizar um banco de dados é **organizar as informações para que cada daddo exisra apenas uma vez**, evitando erros e bagunça nas tabelas
+## 5.1 Exemplo prático
+**Forma não normalizada (UNF)**
+| OrderId| CustomerName| CustomerPhone| Products| Total|
+|--------|-------------|--------------|---------|------|
+|1001| Ana Silva| 9999-1111| Notebook, Mouse| 3500
+|1002| João Souza| 9888-2222| Teclado| 200|
+|1003| Ana Silva| 9999-1111| Monitor, Cabo HDMI, Mouse| 1200
+
+- Todos os dados estão misturados em uma única tabela, com grupos repetidos.
+- Dados do cliente Repetidos
+- Difícil de consultar e manter.
+## 5.2 Primeira Forma Normal (1FN)
+- Os campos devem ser **atômicos** (um único valor por célula).
+
+**Exemplo:**
+|OrderId| CustomerName|CustomerPhone| Product| Total|
+|-------|---------|------------|-----------|-----|
+|1001|Ana Silva|9999-1111| Notebook|3500|
+|1001| Ana Silva| 9999-1111| Mouse| 3500|
+1002| João Souza| 9888-2222| Teclado| 200|
+1003| Ana Silva| 9999-1111| Monitor| 1200|
+1003| Ana Silva| 9999-1111| cabo HDMI| 1200|
+1003| Ana Silva| 9999-1111| Mouse| 1200|
+- Probelma: Dados dos clientes continuam duplicados
+- Total aparace APENAS ao pedido
+- Ainda existe dependências (responsabilidades) na mesma tabela
+## 5.3 Segunda Forma Normal (2FN)
+- Regras:
+    - Deve estar a 1FN.
+    - Removemos pendências parciais.
+    - cada entidade passa a ter sua própria tabela e ter sua própria chave primária.
+
+**Exemplo:**
+
+Tabela 1
+|CustomerId| Nome| Telefone|
+|----------|-----|----------|
+1| Ana Silva| 9999-1111|
+2|João Souza| 9888- 2222|
+
+Tabela 2
+
+| OrderID| CustomerID| Total|
+|--------|-----------|------|
+1001|1|3500|
+1002|2|200|
+1003|1|1200|
+
+Tabela 3
+
+|OrderID| Produto|
+|-------|--------|
+1001|Notebook|
+1001|Mouse|
+1002|Teclado|
+1003|Monitor|
+1003|Cabo HDMI|
+1003| Mouse|
+
+- Problema:
+    - Produto é um texto livre... está "solto" .
+## 5.4 Terceira forma normal (3FN)
+- Regras: 
+    - Deve estar na 2FN.
+    - Remover dependências transitivas.
+        - Campos não-chave DEVEM depender apenas da chave. 
+
+Exemplo: Tabela 1
+
+CustomerID| Nome| Telefone|
+|---------|-----|--------|
+1|Ana Silva | 9999-1111|
+2| João Souza| 9888-2222|
+
+Tabela 2
+
+|ProductID| NomeProduto|
+|---------|------------|
+10|Notebook|
+11|Mouse
+12|Teclado
+13|Monitor
+14|Cabo HDMI
+
+Tabela 3
+|OrderID| CustomerID| Total|
+|------|-----------|-------|
+1001|1|3500|
+1002|2|200|
+1003|1|1200|
+
+Tabela 4
+
+|OrderID| ProductID|
+|------|----------|
+1001|10|
+1001|11|
+1002|12|
+1003|13
+1003|14
+1003|11
+-------
+**Resultado**
+
+- **O banco de dados agora possui**
+    - Ausência de redundância.
+    - Relacionamentos claros (Chaves Estrangeiras).
+        - Estrutura relacional correta.
+    - Melhor desempenho.
+    - Manuntenção facilitada.
+- **Isso torna os bancos de dados**
+    - Mais eficientes.
+    - Mais confiáveis.
+    - Mais fáceis de escalar.
+    - Mais fáceis de entender.
+## 6 Métodos de combinação
+### Joins (Adição de Colunas - Horizontal)
+- Conectamos tabelas lateralmente através de uma coluna comum (Chave).
+    - Inner Join: Apenas o que existe em ambas as tabelas
+    - Left Join: Mantemos tudo da tabela à esquerda e trazemos o que houver da direita.
+    - Right Join: Mantemos tudo da direita e trazemos o que houver da esquerda
+    - Full Join: Trazemos tudo de ambos os lados, independentemente de haver correspondência.
+### Como usamos Joins
+- Ao escrevermos um JOIN, devemos especificar a relação:
+
+SELECT
+
+TabelaA.Nome,
+
+TabelaB.Pais
+
+FROM
+
+TabelaA INNER JOIN TabelaB ON TabelaA.id = TabelaB.id;
+
+---
+### Operadores SET(Adição de Liihas - Vertical)
+- Empilhamos resultados de consultas diferentes, desde que tenham a mesma estrutura de colunas
+    - UNION: Combina os resultados e remove duplicados
+    - UNION ALL: Combina tudo, incluindo duplicados (é mais rápido)
+    - EXCEPT / MINUS: Mostra o que existe no primeiro conjunto mas não no segundo
+    - INTERSECT: Mostra apenas o que é comum a ambos os conjuntos
+### Como usamos operadores SET
+SELECT
+
+    Nome
+FROM
+
+    Clientes
+
+UNION
+
+SELECT
+
+    Nome
+
+FROM
+
+    Funcionarios;
+
     
     
     
