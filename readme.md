@@ -353,7 +353,81 @@ SELECT
 FROM
 
     Funcionarios;
+## 7 Funções de linha única no SQL
+### O que são funções SQL?
+- **Definição**: Conjuntos de instruções que recebem um ou mais valores de entrada e retornam um valor de saída
+- **Utilidade**:
+    - **Limpeza**: Remover espaços extras ou caracteres indesejados
+    - **Transformação**: Alterar formatos de data ou converter textos
+    - **Análise**: Realizar cálculos rápidos por linha.
+- **Processo: Entrada (valor) -> FUNÇÂO -> Saída (Novo valor)**
+### Funções de texto (String functions)
+- **Manipulação**:
+    - **Concat**: Une duas ou mais strings (ex:Nome + Sobrenome)
+    - **UPPER/LOWER**: Converte o texto para MAIÚSCULO ou minúsculo
+    - **TRIM**: Remove espaços em branco no início e no fim
+    -- **REPLACE**: Substitui um caractere ou trecho de texto por outro
+- **Extração me Medida**:
+    - **LEN**: Retorna a quantidade de caracteres.
+    - **LEFT / RIGHT**: Extrai caracteres a partir da esquerda ou direita
+    - **SUBSTRING**: Extrai uma parte específica do texto de qualquer posição.
+### Funções de Data e Hora (Date & Time)
+- **CÁLCULOS**
+    - **DATEADD**: Adiciona um intervalo (dias, meses, anos) a uma data
+    - **DATEDIFF**: Calcula a diferença entre duas datas
+- **Extração de Partes**:
+    - **YEAR, MONTH, DAY**: Extraem o ano, mês ou dia numérico
+    - **DATENAME**: Retorna o nome da parte da data(ex: "Janeiro", "Segunda-Feira")
+- **Conversão**
+    - **CAST/CONVERT**: Alteram o tipo de dado (ex: de Texto para Data).
+    - **FORMAT**: Define como a data será exibida (ex: 'dd/MM/yyyy').
+### Tratamento de valores Nulos (NULL Functions)
+- **Por que tratar nulos?** Evitar erros em cálculos e garantir relatórios precisos.
+- **Principais Funções**:
+    - **ISNULL(valor, substituto)**: Se o valor for nulo, substitui por outro.
+    - **COALESCE(v1, v2, ...)**: Retorna o primeiro valor não nulo de uma lista.
+    - **NULLIF(v1, v2)**: Retorna nulo se os dois valores forem iguais.
+    - **IS NULL:** Operador para filtrar registros sem dados.
+### Lógica Condicional (CASE Statement)
+ - **O que é**: Funciona como um "SE... ENTÃO" (IF... THEN) dentro do SQL.
+ - **Aplicações**:
+    - **Categorização**: Se Venda > 1000 então 'Premium'.
+    - **Padronização**: Converter 'Alemanha' para 'DE', 'Brasil' para 'BR'.
+- **Sintaxe Básica**:
+    - **CASE**
+    - **WHEN Condição THEN Resultado**
+    - **ELSE Resultado_Padrão**
+    - **END**
+### Funções Aninhadas (Nested Functions)
+- **Conceito**: Usar uma função como entrada para outra função.
+- **Exemplo Prático**:
+    - **LEN(LOWER(LEFT('Maria', 2)))**
+    - **LEFT('Maria', 2) -> 'Ma'**
+    - **LOWER('Ma') -> 'ma'**
+    - **LEN('ma') -> Resultado Final: 2**
+###Conclusão das funções de linha única
+- Funções de linha única retornam **um resultado para cada linha**
+- Podem ser usadas no **SELECT** (para exibir), no **WHERE** (para filtrar) e no **ORDER BY** (para ordenar).
+## 8- Funções de Agregação
+### O que são Funções de Agregação?
+- As funções de agregação processam um
+conjunto de valores para retornar um **único
+valor resumido**. Elas são essenciais para
+transformar dados brutos em informações
+estratégicas.
 
-    
-    
+Tabela de Funções:
+|**Função**|**Finalidade**|**Tipos de dados Compatíveis**|
+|----------|--------------|-------------------------------|
+|COUNT| Conta o número de registros (linhas)|Qualquer tipo|
+|SUM| Soma os valores de uma coluna| Apenas Numéricos|
+|AVG| Calcula a média aritimética dos valores| Apenas Numéricos|
+|MAX| Identifica o valor máximo (maior)| Numéricos, Datas e Texto|
+|MIN| Identifica o valor mínimo (menor)| Numéricos, Datas e Texto|
+### Cláusula GROUP BY (Agrupamento)
+- A cláusula **GROUP BY** é utilizada para organizar linhas que possuem valores idênticos em grupos. Ela é quase sempre utilizada em conjunto com as funções de agregação mencionadas acima.
+- **Condensação de Registros**: A principal função do **GROUP BY** é reduzir (achatar) múltiplos registros em uma única linha de resumo por grupo.
+- **Cálculos em Nível de Grupo**: Ao contrário de uma conta simples no banco de dados inteiro, o agrupamento permite realizar **Cálculos de Nível de Grupo** (ex: calcular o faturamento total por categoria de produto em vez do faturamento total da loja)
+### Exemplo prático
+- Se você tem uma tabela de vendas e usa GROUP BY regiao, o SQL pegará todas as vendas de "Sul", "Norte" e "Leste" e entregará apenas uma linha para cada região com os totais somados.
     
